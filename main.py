@@ -118,13 +118,7 @@ def answer(call):
             bot.send_message(call.message.chat.id, 'Маршрут удален', reply_markup=keyboard_start)
             with open('booked.txt', 'a') as f:
                 json.dump(book, f)
-            # n = 0
-            # m = int(call.data)
-            # for i in dict_poputi[call.from_user.id]:
-            #     if n == m:
-            #         del dict_poputi[call.from_user.id][n]
-            #         bot.send_message(call.message.chat.id, 'Маршрут удален')
-            #     n += 1
+          
     elif call.message.text == 'Забронировать':
         name = spisok_reg[call.data]['name']
         bot.send_message(call.message.chat.id, 'Вы забронировали машину' + name)
@@ -161,19 +155,8 @@ def potverdit(call):
                 name = spisok_reg[i]['name']
                 if call.message.text[30:] == name:
                     index_user = i
-            # if index_user in book:
-            #     for j in book[index_user]:
-            #         for r in j:
-            #             bot.send_message(r, spisok_reg[call.from_user.id]['name'] + ' с вами не сможет поехать')
+           
             if call.from_user.id in dict_sotr:
-                # for i in dict_sotr[call.from_user.id]:
-                # if index_user in book:
-                #     for j in book[index_user]:
-                #         # for r in j:
-                #         if int(j) == call.from_user.id:
-                #             bot.send_message(index_user,
-                #                              spisok_reg[call.from_user.id]['name'] + ' с вами не сможет поехать')
-                #             bot.send_message(int(j), 'Отказано')
                 if dict_sotr[call.from_user.id]['type'] == 'driver':
                     if call.from_user.id in book:
                     # for j in book:
@@ -197,27 +180,12 @@ def potverdit(call):
                         bot.send_message(call.from_user.id, 'Пользователь ' + spisok_reg[int(call.data)][
                                         'name'] + ' уже едет с другим водителем, вам необходимо посмотреть другие заявки для вашего маршрута')
                         return
-                # for i in book:
-                #     if call.from_user.id != i:
-                #         if book[i][int(call.data)] == True:
-                #             bot.send_message(call.from_user.id, 'Пользователь ' + spisok_reg[int(call.data)][
-                #                 'name'] + ' уже едет с другим водителем, вам необходимо посмотреть другие заявки для вашего маршрута')
-                #             # bot.send_message(int(call.data), 'Вы уже едите вместе с ' + spisok_reg[i]['name'])
-                #             return
+               
             elif dict_sotr[call.from_user.id]['type'] == 'passenger':
                 if call.from_user.id in passenger_bron:
                     if passenger_bron[call.from_user.id] == True:
                         bot.send_message(call.from_user.id, 'Вы забронировали поездку, вам нужно завершить текущую поездку.')
                         return
-
-
-                # for i in book:
-                #     if call.from_user.id in book[i]:
-                #         if book[i][call.from_user.id] == True:
-                #             bot.send_message(int(call.data), 'Пользователь ' + spisok_reg[call.from_user.id][
-                #                 'name'] + ' уже едет с другим водителем, вам необходимо посмотреть другие заявки для вашего маршрута')
-                #             bot.send_message(call.from_user.id, 'Вы уже едите вместе с ' + spisok_reg[i]['name'])
-                #             return
 
             if int(call.data) in dict_sotr:
                 typeUser = dict_sotr[call.from_user.id]['type']
@@ -267,9 +235,6 @@ def potverdit(call):
         bot.send_message(call.from_user.id, 'Вы не создали маршрут')
 
 
-
-# @bot.callback_query_handler(func=lambda call: int(call.data) in spisok_reg)
-# @bot.callback_query_handler(func=lambda call: True)
 @bot.callback_query_handler(func=lambda call: call.from_user.id in spisok_reg)
 def callback_user(call):
     if int(call.data) in spisok_reg:
@@ -284,13 +249,6 @@ def callback_user(call):
                     return
 
             if dict_sotr[call.from_user.id]['type'] == 'driver':
-                # for i in book:
-                #     if call.from_user.id != i:
-                #         if book[i][int(call.data)] == True:
-                #             bot.send_message(call.from_user.id, 'Пользователь ' + spisok_reg[int(call.data)][
-                #                 'name'] + ' уже едет с другим водителем, вам необходимо посмотреть другие заявки для вашего маршрута')
-                #             #bot.send_message(int(call.data), 'Вы уже едите вместе с ' + spisok_reg[i]['name'])
-                #             return
                 if int(call.data) in passenger_bron:
                     if passenger_bron[int(call.data)] == True:
                         # bot.send_message(call.from_user.id, 'Вы забронировали поездку, вам нужно завершить текущую поездку.')
@@ -353,7 +311,6 @@ def callback_user(call):
 def del_dict(user_id):
     if user_id in dict_sotr:
         m = 0
-        # for i in dict_sotr[user_id]:
         markup1 = telebot.types.InlineKeyboardMarkup()
         inlineButton2 = telebot.types.InlineKeyboardButton(text='Удалить маршрут', callback_data=str(m))
         markup1.row(inlineButton2)
@@ -397,18 +354,11 @@ def find_me(user_id, d):
                         imya_polz = imena(spisok_zareg[str(i)]['name'])
                         bot.send_message(user_id, imya_polz)
                     markup1 = telebot.types.InlineKeyboardMarkup()
-                    # inlineButton2 = telebot.types.InlineKeyboardButton(text='Предложить', callback_data=i) '%s %s' % (op, index)
                     s = str(i) + '|' + d['type'] + '|' + d['pointA'] + '|' + d['pointB'] + '|' + d['time'] + '|' + str(d['dopPoint'])
-                    # inlineButton2 = telebot.types.InlineKeyboardButton(text='Предложить', callback_data='%s %s' % (i, dict_sotr['type']))
-                    # s = str(i) + '|' + dict_sotr['type']
                     inlineButton2 = telebot.types.InlineKeyboardButton(text='Поехать вместе', callback_data=i)
                     markup1.row(inlineButton2)
                     bot.send_message(user_id, message, reply_markup=markup1)
-                    # if i in spisok_reg:
-                    #     bot.send_message(user_id, spisok_reg[i]['name'], reply_markup=markup1)
-                    # elif str(i) in spisok_zareg:
-                    #     bot.send_message(user_id, spisok_zareg[str(i)]['name'], reply_markup=markup1)
-
+                    
 def push_msg(user_id, d):
     with open('spisok_register.txt', 'r') as f:
         try:
@@ -427,8 +377,6 @@ def push_msg(user_id, d):
                 if dict_sotr[i]['type'] == d['type']:
                     continue
                 else:
-                    # if dict_sotr[i]['pointA'] == d['pointA'] or dict_sotr[i]['pointB'] == d['pointB'] or dict_sotr[i][
-                    #     'time'] == d['time'] or dict_sotr[i]['dopPoint'] == d['dopPoint']:
                     if 'infocar' in d:
                         inf_car = ', машина ' + d['infocar']
                     else:
@@ -439,7 +387,7 @@ def push_msg(user_id, d):
                     else:
                         message = 'По маршруту: ' + d['pointA'] + ' - ' + d['pointB'] + ', \nвремя - ' + d['time'] + ', \nпромежуточная точка ' + str(d['dopPoint']) +  inf_car
                     bot.send_message(i, 'Актуальные заявки')
-                    # bot.send_message(i, message)
+                   
                     if user_id in spisok_reg:
                         imya_polz = imena(spisok_reg[user_id]['name'])
                         bot.send_message(i, imya_polz)
@@ -450,11 +398,7 @@ def push_msg(user_id, d):
                     inlineButton2 = telebot.types.InlineKeyboardButton(text='Поехать вместе', callback_data=user_id)
                     markup1.row(inlineButton2)
                     bot.send_message(i, message, reply_markup=markup1)
-                    # if user_id in spisok_reg:
-                    #    bot.send_message(i, spisok_reg[user_id]['name'], reply_markup=markup1)
-                    # elif str(user_id) in spisok_zareg:
-                    #     bot.send_message(i, spisok_zareg[str(user_id)]['name'], reply_markup=markup1)
-
+                   
 
 def proverka_registracii(user_id):
     with open('spisok_register.txt', 'r') as f:
@@ -494,7 +438,6 @@ def get_text_messages(message):
             except ValueError:
                 spisok_zareg = {}
         if message.from_user.id in book:
-            # book[int(message.from_user.id)] = {}
             del book[message.from_user.id]
 
         delete = {}
@@ -569,36 +512,6 @@ def get_text_messages(message):
 
         doc.close()
         del dict_sotr[message.from_user.id]
-        # временно
-        # if typeUser == 'driver':
-        #     a1 = None
-        #     if message.from_user.id in book:
-        #         a1 = message.from_user.id
-        #         # for i in book[message.from_user.id]:
-        #         #     if book[message.from_user.id][i] == True:
-        #         #         a1 = message.from_user.id
-        #         #     elif book[message.from_user.id] == {}:
-        #         #         a1 = message.from_user.id
-        #         #     else:
-        #         #         pass
-        #         if a1 != None:
-        #             del book[a1]
-        #
-        #     # book[int(call.from_user.id)] = [{int(call.data): True}]
-        # elif typeUser == 'passenger':
-        #     a1 = None
-        #     a2 = None
-        #     for i in book:
-        #         for j in book[i]:
-        #             if j == message.from_user.id:
-        #                 if book[i][j] == True:
-        #                     a1 = i
-        #                     a2 = j
-        #                 else:
-        #                     pass
-        #     if a1!= None and a2!=None:
-        #         del book[a1][a2]
-
 
         # bot.send_message(message.from_user.id, 'Спасибо за то, что возпользовались сервисом, будем делать вам новых успешных поездок!', reply_markup=keyboard_start)
         if mark_msg:
@@ -624,58 +537,24 @@ def get_text_messages(message):
         bot.register_next_step_handler(message, ads_pointA)
 
     elif message.text.lower() == 'другое время':
-        # step_time = True
         bot.send_message(message.from_user.id, 'Укажите время поездки', reply_markup=keyboard_stop)
 
     elif message.text.lower() == 'добавить еще промежуточную остановку':
-        # step_pointC = True
         bot.send_message(message.from_user.id, 'Укажите еще промежуточную остановку', reply_markup=telebot.types.ReplyKeyboardRemove())
         bot.register_next_step_handler(message, ads_pointC)
 
-    elif message.text.lower() == 'пропустить':
-        # if not (message.from_user.id in dict_poputi):
-        #     dict_poputi[message.from_user.id] = []
-        #     dict_poputi[message.from_user.id].append(dict_sotr[message.from_user.id])
-        # else:
-        #     dict_poputi[message.from_user.id].append(dict_sotr[message.from_user.id])
-        d = dict_poputi[message.from_user.id]
-        # dict_sotr = dict_poputi
+    elif message.text.lower() == 'пропустить':       
+        d = dict_poputi[message.from_user.id]       
         dict_sotr[message.from_user.id] = dict_poputi[message.from_user.id]
         push_msg(message.from_user.id, d)
         find_me(message.from_user.id, d)
         bot.send_message(message.from_user.id, 'Выберите следующее', reply_markup=keyboard_main)
     elif message.text.lower() == 'завершить ввод маршрута':
-        # if not (message.from_user.id in dict_poputi):
-        #     dict_poputi[message.from_user.id] = []
-        #     dict_poputi[message.from_user.id].append(dict_sotr[message.from_user.id])
-        # else:
-        #     dict_poputi[message.from_user.id].append(dict_sotr[message.from_user.id])
+       
         with open('user_marshrut.txt', 'a') as f:
             json.dump(dict_poputi, f)
         d = dict_poputi[message.from_user.id]
-        # doc_history = open('history_marshrut.txt', 'a')
-        # if dict_poputi[message.from_user.id]['type'] == 'driver':
-        #     try:
-        #         log_history = '\n' + str(message.from_user.id) + ': ' + dict_poputi[message.from_user.id]['type'] + ', ' + dict_poputi[message.from_user.id]['pointA'] + ', ' + dict_poputi[message.from_user.id]['pointB'] + ', ' + dict_poputi[message.from_user.id]['time'] + ', ' + str(dict_poputi[message.from_user.id]['dopPoint']) + ', ' + dict_poputi[message.from_user.id]['infocar']
-        #     except:
-        #         log_history = '\n' + str(message.from_user.id) + " использовал смайлики"
-        #
-        #
-        # elif dict_poputi[message.from_user.id]['type'] == 'passenger':
-        #     try:
-        #         log_history = '\n' + str(message.from_user.id) + \
-        #                   ': ' + dict_poputi[message.from_user.id]['type'] + \
-        #                   ', ' + dict_poputi[message.from_user.id]['pointA'] + \
-        #                   ', ' + dict_poputi[message.from_user.id]['pointB'] + \
-        #                   ', ' + dict_poputi[message.from_user.id]['time'] + \
-        #                   ', ' + str(dict_poputi[message.from_user.id]['dopPoint'])
-        #     except:
-        #         log_history = '\n' + str(message.from_user.id) + " использовал смайлики"
-        #
-        # # doc_history.write(log_history)
-        # doc_history.close()
-
-        # dict_sotr.update(dict_poputi)
+        
         dict_sotr[message.from_user.id] = dict_poputi[message.from_user.id]
         push_msg(message.from_user.id, d)
         find_me(message.from_user.id, d)
@@ -762,8 +641,7 @@ def ads_time(message):
     else:
         dict_poputi[message.from_user.id]['time'] = message.text.lower()
         dict_poputi[message.from_user.id]['dopPoint'] = []
-        # bot.send_message(message.from_user.id, 'Укажите промежуточную точку', reply_markup=key_dopost)
-        # bot.register_next_step_handler(message, ads_pointC)
+        
         if dict_poputi[message.from_user.id]['type'] == 'driver':
             bot.send_message(message.from_user.id, 'Укажите марку автомобиля, цвет и гос. номер', reply_markup=keyboard_stop)
             bot.register_next_step_handler(message, ads_infocar)
@@ -778,33 +656,11 @@ def ads_pointC(message):
         del dict_poputi[message.from_user.id]
         bot.send_message(message.from_user.id, 'Выберите следующее', reply_markup=keyboard_start)
     elif message.text.lower() == 'пропустить':
-        # if not (message.from_user.id in dict_poputi):
-        #     dict_poputi[message.from_user.id] = []
-        #     dict_poputi[message.from_user.id].append(dict_sotr[message.from_user.id])
-        # else:
-        #     dict_poputi[message.from_user.id].append(dict_sotr[message.from_user.id])
+       
         with open('user_marshrut.txt', 'a') as f:
             json.dump(dict_poputi, f)
         d = dict_poputi[message.from_user.id]
-        # doc_history = open('history_marshrut.txt', 'a')
-        # if dict_poputi[message.from_user.id]['type'] == 'driver':
-        #     try:
-        #         log_history = '\n' + str(message.from_user.id) + ': ' + dict_poputi[message.from_user.id]['type'] + ', ' + dict_poputi[message.from_user.id]['pointA'] + ', ' + dict_poputi[message.from_user.id]['pointB'] + ', ' + dict_poputi[message.from_user.id]['time'] + ', ' + str(dict_poputi[message.from_user.id]['dopPoint']) + ', ' + dict_poputi[message.from_user.id]['infocar']
-        #     except:
-        #         log_history = '\n' + str(message.from_user.id) + ' использовал смайлики'
-        # elif dict_poputi[message.from_user.id]['type'] == 'passenger':
-        #     try:
-        #         log_history = '\n' + str(message.from_user.id) + \
-        #                   ': ' + dict_poputi[message.from_user.id]['type'] + \
-        #                   ', ' + dict_poputi[message.from_user.id]['pointA'] + \
-        #                   ', ' + dict_poputi[message.from_user.id]['pointB'] + \
-        #                   ', ' + dict_poputi[message.from_user.id]['time'] + \
-        #                   ', ' + str(dict_poputi[message.from_user.id]['dopPoint'])
-        #     except:
-        #         log_history = '\n' + str(message.from_user.id) + ' использовал смайлики'
-        # # doc_history.write(log_history)
-        # doc_history.close()
-        # dict_sotr.update(dict_poputi)
+       
         dict_sotr[message.from_user.id] = dict_poputi[message.from_user.id]
         push_msg(message.from_user.id, d)
         find_me(message.from_user.id, d)
@@ -829,7 +685,6 @@ def ads_num_passenger(message):
         del dict_poputi[message.from_user.id]
         bot.send_message(message.from_user.id, 'Выберите следующее', reply_markup=keyboard_start)
     else:
-        # dict_poputi[message.from_user.id]['infocar'] = message.text.lower()
         num_passenger = message.text.lower()
         driver_num_passenger[message.from_user.id] = int(num_passenger)
         driver_number[message.from_user.id] = 0
